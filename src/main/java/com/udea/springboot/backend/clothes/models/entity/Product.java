@@ -29,10 +29,11 @@ public class Product implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotEmpty(message = "Full name can't be empty")
+	
 	@Size(min = 10, max = 25, message = "The size should be between ")
+	@NotEmpty(message = "Name can't be empty")
 	@Column(nullable = false)
-	private String fullName;
+	private String name;
 	
 	@NotEmpty(message = "Description can't be empty")
 	@Column(nullable = false)
@@ -56,11 +57,13 @@ public class Product implements Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
 	
-	@NotNull(message = "The country can't be empty")
+	
+	//@NotNull(message = "The country can't be empty")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "country_id")
+	@JoinColumn(name = "country_id", nullable = true)
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Country country;
+	
 	
 	@PrePersist
 	public void prePersist() {
@@ -83,12 +86,12 @@ public class Product implements Serializable{
 		this.createAt = createAt;
 	}
 	
-	public String getFullName() {
-		return fullName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDescription() {
@@ -138,6 +141,7 @@ public class Product implements Serializable{
 	public void setBackImageUrl(String backImageUrl) {
 		this.backImageUrl = backImageUrl;
 	}
+	
 	
 	public Country getCountry() {
 		return country;
