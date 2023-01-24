@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.udea.springboot.backend.clothes.models.entity.Product;
@@ -34,7 +35,7 @@ public class ProductRestController {
 	}
 	
 	@PostMapping("/products")
-	public ResponseEntity<?> create(@Valid @RequestBody Product product, BindingResult result) {
+	public ResponseEntity<?> create(@Valid @RequestBody Product product, @RequestParam(value = "countryCode", required = false) String countryCodes, BindingResult result) {
 		
 		Product productNew = null;
 		Map<String, Object> response = new HashMap<>();
@@ -51,7 +52,8 @@ public class ProductRestController {
 		}
 		
 		try {
-			productNew = productService.save(product);
+			String countryCode = "CL";
+			productNew = productService.save(product, countryCode);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
